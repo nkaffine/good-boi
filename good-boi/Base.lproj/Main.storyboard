@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Camera View Controller-->
+        <!--Good Boi View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="CameraViewController" customModule="good_boi" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="GoodBoiViewController" customModule="good_boi" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -21,14 +21,14 @@
                         <gestureRecognizers/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <connections>
-                            <outletCollection property="gestureRecognizers" destination="3p9-EC-WeI" appends="YES" id="whO-6q-8AF"/>
+                            <outletCollection property="gestureRecognizers" destination="LR1-q8-EKs" appends="YES" id="rTH-3z-JUx"/>
                         </connections>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="3p9-EC-WeI">
+                <tapGestureRecognizer id="LR1-q8-EKs">
                     <connections>
-                        <action selector="mainViewTapped:" destination="BYZ-38-t0r" id="OjW-FP-vs4"/>
+                        <action selector="mainViewTapped:" destination="BYZ-38-t0r" id="lIV-px-iXc"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

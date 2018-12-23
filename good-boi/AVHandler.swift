@@ -16,30 +16,30 @@ enum CameraViewError: Error
     sessionFailure, previewLayerFailure, photoCaptureFailure
 }
 
-protocol CameraViewDelegate: class
+protocol AVHandlerDelegate: class
 {
     func failed(with error: CameraViewError)
     func captureSucceeded(with photo: CGImage)
 }
 
-protocol CameraViewProtocol
+protocol AVHandlerProtocol
 {
-    func initiateCapture()
+    func initiatePhotoCapture()
+    func setupPreviewLayer(on view: UIView)
+    
+    var delegate: AVHandlerDelegate? { get set }
 }
 
-class CameraViewController: UIViewController
+class AVHandler: NSObject, AVHandlerProtocol
 {
     private var captureSession: AVCaptureSession?
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
     private var output: AVCapturePhotoOutput = AVCapturePhotoOutput()
     private var captureSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
     
-    weak var delegate: CameraViewDelegate?
+    weak var delegate: AVHandlerDelegate?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        delegate = self
-        
+    func setupPreviewLayer(on view: UIView) {
         guard let captureDevice = AVCaptureDevice.default(for: .video) else
         {
             delegate?.failed(with: .captureDeviceFailure)
@@ -79,20 +79,20 @@ class CameraViewController: UIViewController
     
     @IBAction func mainViewTapped(_ sender: UITapGestureRecognizer)
     {
-        initiateCapture()
+        initiatePhotoCapture()
     }
 }
 
-extension CameraViewController: CameraViewProtocol
+extension AVHandler
 {
-    func initiateCapture() {
+    func initiatePhotoCapture() {
         let photoSettings = AVCapturePhotoSettings(from: captureSettings)
         output.capturePhoto(with: photoSettings, delegate: self)
         print("Initiated Capture")
     }
 }
 
-extension CameraViewController: AVCapturePhotoCaptureDelegate
+extension AVHandler: AVCapturePhotoCaptureDelegate
 {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?)
     {
@@ -104,18 +104,5 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate
         {
             delegate?.failed(with: .photoCaptureFailure)
         }
-    }
-}
-
-extension CameraViewController: CameraViewDelegate
-{
-    func captureSucceeded(with photo: CGImage) {
-        print("received an image")
-    }
-    
-    func failed(with error: CameraViewError) {
-        let alertController = UIAlertController(title: nil, message: error.localizedDescription, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Ok", style: .default))
-        present(alertController, animated: true, completion: nil)
     }
 }
