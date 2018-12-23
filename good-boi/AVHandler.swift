@@ -13,7 +13,29 @@ import AVFoundation
 enum CameraViewError: Error
 {
     case captureDeviceFailure, deviceInputFailure,
-    sessionFailure, previewLayerFailure, photoCaptureFailure
+    sessionFailure, previewLayerFailure, photoCaptureFailure,
+    deviceNotAccesible, noDeviceAvailable
+    
+    var message: String
+    {
+        switch self
+        {
+            case .captureDeviceFailure:
+                return "The capture device failed to initialized"
+            case .deviceInputFailure:
+                return "The device input failed to initialize"
+            case .sessionFailure:
+                return "The capture session failed"
+            case .previewLayerFailure:
+                return "The preview layer failed to initialize"
+            case .photoCaptureFailure:
+                return "The photo capture failed"
+            case .deviceNotAccesible:
+                return "Device input is unaccessable"
+            case .noDeviceAvailable:
+                return "There is no compatible camera on this device"
+        }
+    }
 }
 
 protocol AVHandlerDelegate: class
@@ -40,6 +62,18 @@ class AVHandler: NSObject, AVHandlerProtocol
     weak var delegate: AVHandlerDelegate?
     
     func setupPreviewLayer(on view: UIView) {
+        guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else
+        {
+            delegate?.failed(with: .deviceNotAccesible)
+            return
+        }
+        
+        guard !AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInTelephotoCamera, .builtInDualCamera, .builtInTrueDepthCamera, .builtInWideAngleCamera], mediaType: .video, position: .back).devices.isEmpty else
+        {
+            delegate?.failed(with: .deviceNotAccesible)
+            return
+        }
+        
         guard let captureDevice = AVCaptureDevice.default(for: .video) else
         {
             delegate?.failed(with: .captureDeviceFailure)
@@ -76,16 +110,17 @@ class AVHandler: NSObject, AVHandlerProtocol
             delegate?.failed(with: .sessionFailure)
         }
     }
-    
-    @IBAction func mainViewTapped(_ sender: UITapGestureRecognizer)
-    {
-        initiatePhotoCapture()
-    }
 }
 
 extension AVHandler
 {
     func initiatePhotoCapture() {
+        guard let _ = captureSession else
+        {
+            delegate?.failed(with: .photoCaptureFailure)
+            return
+        }
+        
         let photoSettings = AVCapturePhotoSettings(from: captureSettings)
         output.capturePhoto(with: photoSettings, delegate: self)
         print("Initiated Capture")
