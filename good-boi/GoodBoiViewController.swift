@@ -17,7 +17,7 @@ enum DogClassification
 class GoodBoiViewController: UIViewController {
     private var avHandler: AVHandlerProtocol?
     private var errorQueue: [CameraViewError]? = []
-    private var model = DogClassifier()
+    private var model: VNCoreMLModel?
     
     @IBOutlet var modelLabel: UILabel!
     @IBOutlet var cameraView: UIView!
@@ -26,6 +26,7 @@ class GoodBoiViewController: UIViewController {
         super.viewDidLoad()
         cameraView.frame = view.bounds
         modelLabel.text = nil
+        model = try? VNCoreMLModel(for: DogClassifier().model)
         setupAVHandler()
     }
     
@@ -68,7 +69,7 @@ class GoodBoiViewController: UIViewController {
 extension GoodBoiViewController: AVHandlerDelegate
 {
     func captureSucceeded(with photo: CGImage) {
-        guard let model = try? VNCoreMLModel(for: model.model) else
+        guard let model = model else
         {
             return
         }

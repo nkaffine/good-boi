@@ -62,6 +62,17 @@ class AVHandler: NSObject, AVHandlerProtocol
     weak var delegate: AVHandlerDelegate?
     
     func setupPreviewLayer(on view: UIView) {
+        if AVCaptureDevice.authorizationStatus(for: .video) == .notDetermined
+        {
+            AVCaptureDevice.requestAccess(for: .video)
+            { [weak self] allowed in
+                if allowed
+                {
+                    self?.setupPreviewLayer(on: view)
+                }
+            }
+            return
+        }
         guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else
         {
             delegate?.failed(with: .deviceNotAccesible)
@@ -123,7 +134,6 @@ extension AVHandler
         
         let photoSettings = AVCapturePhotoSettings(from: captureSettings)
         output.capturePhoto(with: photoSettings, delegate: self)
-        print("Initiated Capture")
     }
 }
 
