@@ -7,13 +7,25 @@
 //
 
 import UIKit
+import Vision
+
+enum DogClassification
+{
+    case dog, notDog
+}
 
 class GoodBoiViewController: UIViewController {
     private var avHandler: AVHandlerProtocol?
     private var errorQueue: [CameraViewError]? = []
+    private var model = DogClassifier()
+    
+    @IBOutlet var modelLabel: UILabel!
+    @IBOutlet var cameraView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        cameraView.frame = view.bounds
+        modelLabel.text = nil
         setupAVHandler()
     }
     
@@ -32,11 +44,23 @@ class GoodBoiViewController: UIViewController {
     {
         avHandler = AVHandler()
         avHandler?.delegate = self
-        avHandler?.setupPreviewLayer(on: view)
+        avHandler?.setupPreviewLayer(on: cameraView)
+    }
+    
+    func recognized(_ classificiation: DogClassification)
+    {
+        switch classificiation
+        {
+            case .dog:
+                self.modelLabel.text = "Dog"
+            case .notDog:
+                self.modelLabel.text = "Not Dog"
+        }
     }
     
     @IBAction func mainViewTapped(_ sender: UITapGestureRecognizer)
     {
+        modelLabel.text = nil
         avHandler?.initiatePhotoCapture()
     }
 }
@@ -44,7 +68,28 @@ class GoodBoiViewController: UIViewController {
 extension GoodBoiViewController: AVHandlerDelegate
 {
     func captureSucceeded(with photo: CGImage) {
-        print("received an image")
+        guard let model = try? VNCoreMLModel(for: model.model) else
+        {
+            return
+        }
+        let request = VNCoreMLRequest(model: model)
+        { finishedRequest, error in
+            guard let results = finishedRequest.results as? [VNClassificationObservation] else { return }
+            guard let observation = results.first else { return }
+            
+            observation.identifier == "dog" ? self.recognized(.dog) : self.recognized(.notDog)
+        }
+        
+        request.imageCropAndScaleOption = .centerCrop
+        let requestHandler = VNImageRequestHandler(cgImage: photo, options: [:])
+        do
+        {
+            try requestHandler.perform([request])
+        }
+        catch
+        {
+            print("it failed")
+        }
     }
     
     func failed(with error: CameraViewError) {
