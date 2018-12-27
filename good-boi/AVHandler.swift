@@ -38,6 +38,11 @@ enum CameraViewError: Error
     }
 }
 
+enum CaptureStatus
+{
+    case processing, idle
+}
+
 protocol AVHandlerDelegate: class
 {
     func failed(with error: CameraViewError)
@@ -50,6 +55,7 @@ protocol AVHandlerProtocol
     func setupPreviewLayer(on view: UIView)
     
     var delegate: AVHandlerDelegate? { get set }
+    var status: CaptureStatus { get }
 }
 
 class AVHandler: NSObject, AVHandlerProtocol
@@ -60,6 +66,7 @@ class AVHandler: NSObject, AVHandlerProtocol
     private var captureSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
     
     weak var delegate: AVHandlerDelegate?
+    private (set) var status: CaptureStatus = .idle
     
     func setupPreviewLayer(on view: UIView) {
         if AVCaptureDevice.authorizationStatus(for: .video) == .notDetermined
@@ -132,6 +139,7 @@ extension AVHandler
             return
         }
         
+        status = .processing
         let photoSettings = AVCapturePhotoSettings(from: captureSettings)
         output.capturePhoto(with: photoSettings, delegate: self)
     }
@@ -144,10 +152,12 @@ extension AVHandler: AVCapturePhotoCaptureDelegate
         if let cgImage = photo.cgImageRepresentation()
         {
             delegate?.captureSucceeded(with: cgImage.takeUnretainedValue())
+            status = .idle
         }
         else
         {
             delegate?.failed(with: .photoCaptureFailure)
+            status = .idle
         }
     }
 }

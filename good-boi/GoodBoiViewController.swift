@@ -10,20 +10,17 @@ import UIKit
 import Vision
 
 class GoodBoiViewController: UIViewController {
-    private var avHandler: AVHandlerProtocol?
-    private var errorQueue: [CameraViewError]? = []
-    private var classifier: DogClassifierModel = DogClassifierModel()
+    private var errorQueue: [ClassificationError]? = []
+    private var manager: ClassificationManager?
     
-    @IBOutlet var modelLabel: UILabel!
     @IBOutlet var cameraView: UIView!
     @IBOutlet var tailWagger: TailWagger!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         cameraView.frame = view.bounds
-        modelLabel.text = nil
-        setupAVHandler()
-        classifier.delegate = self
+        manager = ClassificationManager(with: cameraView)
+        manager?.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -35,24 +32,12 @@ class GoodBoiViewController: UIViewController {
             errorQueue = nil
             failed(with: error)
         }
-    }
-    
-    func setupAVHandler()
-    {
-        avHandler = AVHandler()
-        avHandler?.delegate = self
-        avHandler?.setupPreviewLayer(on: cameraView)
-    }
-    
-    @IBAction func mainViewTapped(_ sender: UITapGestureRecognizer)
-    {
+        manager?.startSession()
         tailWagger.startWagging()
-//        modelLabel.text = nil
-//        avHandler?.initiatePhotoCapture()
     }
 }
 
-extension GoodBoiViewController: DogClassifierDelegate
+extension GoodBoiViewController: ClassificationManagerDelegate
 {
     func didClassify(with type: DogClassification) {
         switch type
@@ -64,20 +49,7 @@ extension GoodBoiViewController: DogClassifierDelegate
         }
     }
     
-    func failedToClassify(with error: DogClassificationError) {
-        let alertController = UIAlertController(title: nil, message: "\(error)", preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Ok", style: .default))
-        present(alertController, animated: true, completion: nil)
-    }
-}
-
-extension GoodBoiViewController: AVHandlerDelegate
-{
-    func captureSucceeded(with photo: CGImage) {
-        classifier.classify(photo)
-    }
-    
-    func failed(with error: CameraViewError) {
+    func failed(with error: ClassificationError) {
         if errorQueue == nil
         {
             let alertController = UIAlertController(title: nil, message: error.message, preferredStyle: .alert)
@@ -87,6 +59,46 @@ extension GoodBoiViewController: AVHandlerDelegate
         else
         {
             errorQueue?.append(error)
+        }
+    }
+}
+
+private extension ClassificationError
+{
+    var message: String
+    {
+        switch self
+        {
+        case .camera(let error):
+            switch error
+            {
+                case .captureDeviceFailure:
+                    return "capture device failed"
+                case .deviceInputFailure:
+                    return "device input failed"
+                case .sessionFailure:
+                    return "session failed"
+                case .previewLayerFailure:
+                    return "preview layer failed"
+                case .photoCaptureFailure:
+                    return "photo capture failed"
+                case .deviceNotAccesible:
+                    return "capture device not accessible"
+                case .noDeviceAvailable:
+                    return "no devices available"
+            }
+        case .classification(let error):
+            switch error
+            {
+                case .modelError:
+                    return "model error"
+                case .observationError:
+                    return "observation error"
+                case .classificationParsingError:
+                    return "failed to parse classification"
+                case .classificationError:
+                    return "classification failed"
+            }
         }
     }
 }
