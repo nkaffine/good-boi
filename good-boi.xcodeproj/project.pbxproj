@@ -16,6 +16,7 @@
 		01814FA121D00FE100E1BA92 /* AVHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01814FA021D00FE100E1BA92 /* AVHandler.swift */; };
 		01A49FD421D552DB0092B4ED /* DogClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A49FD321D552DB0092B4ED /* DogClassifier.mlmodel */; };
 		01A49FD621D555020092B4ED /* DogClassifierModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A49FD521D555020092B4ED /* DogClassifierModel.swift */; };
+		01CC041521D57E8200145658 /* TailWagger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CC041421D57E8200145658 /* TailWagger.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,7 @@
 		01814FA021D00FE100E1BA92 /* AVHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVHandler.swift; sourceTree = "<group>"; };
 		01A49FD321D552DB0092B4ED /* DogClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = DogClassifier.mlmodel; sourceTree = "<group>"; };
 		01A49FD521D555020092B4ED /* DogClassifierModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogClassifierModel.swift; sourceTree = "<group>"; };
+		01CC041421D57E8200145658 /* TailWagger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TailWagger.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,7 @@
 			children = (
 				01814F8021D00E2F00E1BA92 /* AppDelegate.swift */,
 				01814F8221D00E2F00E1BA92 /* GoodBoiViewController.swift */,
+				01CC041421D57E8200145658 /* TailWagger.swift */,
 				01814FA021D00FE100E1BA92 /* AVHandler.swift */,
 				01A49FD521D555020092B4ED /* DogClassifierModel.swift */,
 				01814F8421D00E2F00E1BA92 /* Main.storyboard */,
@@ -208,6 +211,7 @@
 			files = (
 				01A49FD421D552DB0092B4ED /* DogClassifier.mlmodel in Sources */,
 				01A49FD621D555020092B4ED /* DogClassifierModel.swift in Sources */,
+				01CC041521D57E8200145658 /* TailWagger.swift in Sources */,
 				01814F8321D00E2F00E1BA92 /* GoodBoiViewController.swift in Sources */,
 				01814F8121D00E2F00E1BA92 /* AppDelegate.swift in Sources */,
 				01814FA121D00FE100E1BA92 /* AVHandler.swift in Sources */,

@@ -16,6 +16,7 @@ class GoodBoiViewController: UIViewController {
     
     @IBOutlet var modelLabel: UILabel!
     @IBOutlet var cameraView: UIView!
+    @IBOutlet var tailWagger: TailWagger!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,8 +46,9 @@ class GoodBoiViewController: UIViewController {
     
     @IBAction func mainViewTapped(_ sender: UITapGestureRecognizer)
     {
-        modelLabel.text = nil
-        avHandler?.initiatePhotoCapture()
+        tailWagger.startWagging()
+//        modelLabel.text = nil
+//        avHandler?.initiatePhotoCapture()
     }
 }
 
@@ -56,9 +58,9 @@ extension GoodBoiViewController: DogClassifierDelegate
         switch type
         {
             case .dog:
-                modelLabel.text = "Dog"
+                tailWagger.stopWagging()
             case .notDog:
-                modelLabel.text = "Not Dog"
+                tailWagger.startWagging()
         }
     }
     
@@ -88,4 +90,3 @@ extension GoodBoiViewController: AVHandlerDelegate
         }
     }
 }
-
