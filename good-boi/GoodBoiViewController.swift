@@ -9,15 +9,10 @@
 import UIKit
 import Vision
 
-enum DogClassification
-{
-    case dog, notDog
-}
-
 class GoodBoiViewController: UIViewController {
     private var avHandler: AVHandlerProtocol?
     private var errorQueue: [CameraViewError]? = []
-    private var model: VNCoreMLModel?
+    private var classifier: DogClassifierModel = DogClassifierModel()
     
     @IBOutlet var modelLabel: UILabel!
     @IBOutlet var cameraView: UIView!
@@ -26,8 +21,8 @@ class GoodBoiViewController: UIViewController {
         super.viewDidLoad()
         cameraView.frame = view.bounds
         modelLabel.text = nil
-        model = try? VNCoreMLModel(for: DogClassifier().model)
         setupAVHandler()
+        classifier.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -48,9 +43,17 @@ class GoodBoiViewController: UIViewController {
         avHandler?.setupPreviewLayer(on: cameraView)
     }
     
-    func recognized(_ classification: DogClassification)
+    @IBAction func mainViewTapped(_ sender: UITapGestureRecognizer)
     {
-        switch classification
+        modelLabel.text = nil
+        avHandler?.initiatePhotoCapture()
+    }
+}
+
+extension GoodBoiViewController: DogClassifierDelegate
+{
+    func didClassify(with type: DogClassification) {
+        switch type
         {
             case .dog:
                 modelLabel.text = "Dog"
@@ -59,37 +62,17 @@ class GoodBoiViewController: UIViewController {
         }
     }
     
-    @IBAction func mainViewTapped(_ sender: UITapGestureRecognizer)
-    {
-        modelLabel.text = nil
-        avHandler?.initiatePhotoCapture()
+    func failedToClassify(with error: DogClassificationError) {
+        let alertController = UIAlertController(title: nil, message: "\(error)", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Ok", style: .default))
+        present(alertController, animated: true, completion: nil)
     }
 }
 
 extension GoodBoiViewController: AVHandlerDelegate
 {
     func captureSucceeded(with photo: CGImage) {
-        guard let model = model else
-        {
-            return
-        }
-        let request = VNCoreMLRequest(model: model)
-        { finishedRequest, error in
-            guard let results = finishedRequest.results as? [VNClassificationObservation] else { return }
-            guard let observation = results.first else { return }
-            observation.identifier == "dogs" ? self.recognized(.dog) : self.recognized(.notDog)
-        }
-        
-        request.imageCropAndScaleOption = .centerCrop
-        let requestHandler = VNImageRequestHandler(cgImage: photo, options: [:])
-        do
-        {
-            try requestHandler.perform([request])
-        }
-        catch
-        {
-            print("it failed")
-        }
+        classifier.classify(photo)
     }
     
     func failed(with error: CameraViewError) {
