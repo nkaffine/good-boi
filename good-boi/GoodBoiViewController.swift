@@ -48,14 +48,14 @@ class GoodBoiViewController: UIViewController {
         avHandler?.setupPreviewLayer(on: cameraView)
     }
     
-    func recognized(_ classificiation: DogClassification)
+    func recognized(_ classification: DogClassification)
     {
-        switch classificiation
+        switch classification
         {
             case .dog:
-                self.modelLabel.text = "Dog"
+                modelLabel.text = "Dog"
             case .notDog:
-                self.modelLabel.text = "Not Dog"
+                modelLabel.text = "Not Dog"
         }
     }
     
@@ -77,8 +77,7 @@ extension GoodBoiViewController: AVHandlerDelegate
         { finishedRequest, error in
             guard let results = finishedRequest.results as? [VNClassificationObservation] else { return }
             guard let observation = results.first else { return }
-            
-            observation.identifier == "dog" ? self.recognized(.dog) : self.recognized(.notDog)
+            observation.identifier == "dogs" ? self.recognized(.dog) : self.recognized(.notDog)
         }
         
         request.imageCropAndScaleOption = .centerCrop

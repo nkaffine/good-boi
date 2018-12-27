@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0160A0E221D3D903009ED35B /* DogClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0160A0E121D3D903009ED35B /* DogClassifier.mlmodel */; };
 		01814F8121D00E2F00E1BA92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01814F8021D00E2F00E1BA92 /* AppDelegate.swift */; };
 		01814F8321D00E2F00E1BA92 /* GoodBoiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01814F8221D00E2F00E1BA92 /* GoodBoiViewController.swift */; };
 		01814F8621D00E2F00E1BA92 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01814F8421D00E2F00E1BA92 /* Main.storyboard */; };
@@ -15,6 +14,7 @@
 		01814F8B21D00E3000E1BA92 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01814F8921D00E3000E1BA92 /* LaunchScreen.storyboard */; };
 		01814F9621D00E3000E1BA92 /* good_boiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01814F9521D00E3000E1BA92 /* good_boiTests.swift */; };
 		01814FA121D00FE100E1BA92 /* AVHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01814FA021D00FE100E1BA92 /* AVHandler.swift */; };
+		01A49FD221D449630092B4ED /* DogClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A49FD121D449630092B4ED /* DogClassifier.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,7 +28,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0160A0E121D3D903009ED35B /* DogClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = DogClassifier.mlmodel; sourceTree = "<group>"; };
 		01814F7D21D00E2F00E1BA92 /* good-boi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "good-boi.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		01814F8021D00E2F00E1BA92 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		01814F8221D00E2F00E1BA92 /* GoodBoiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoodBoiViewController.swift; sourceTree = "<group>"; };
@@ -40,6 +39,7 @@
 		01814F9521D00E3000E1BA92 /* good_boiTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = good_boiTests.swift; sourceTree = "<group>"; };
 		01814F9721D00E3000E1BA92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01814FA021D00FE100E1BA92 /* AVHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVHandler.swift; sourceTree = "<group>"; };
+		01A49FD121D449630092B4ED /* DogClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = DogClassifier.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,8 +83,8 @@
 			children = (
 				01814F8021D00E2F00E1BA92 /* AppDelegate.swift */,
 				01814F8221D00E2F00E1BA92 /* GoodBoiViewController.swift */,
-				0160A0E121D3D903009ED35B /* DogClassifier.mlmodel */,
 				01814FA021D00FE100E1BA92 /* AVHandler.swift */,
+				01A49FD121D449630092B4ED /* DogClassifier.mlmodel */,
 				01814F8421D00E2F00E1BA92 /* Main.storyboard */,
 				01814F8721D00E3000E1BA92 /* Assets.xcassets */,
 				01814F8921D00E3000E1BA92 /* LaunchScreen.storyboard */,
@@ -203,7 +203,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0160A0E221D3D903009ED35B /* DogClassifier.mlmodel in Sources */,
+				01A49FD221D449630092B4ED /* DogClassifier.mlmodel in Sources */,
 				01814F8321D00E2F00E1BA92 /* GoodBoiViewController.swift in Sources */,
 				01814F8121D00E2F00E1BA92 /* AppDelegate.swift in Sources */,
 				01814FA121D00FE100E1BA92 /* AVHandler.swift in Sources */,
