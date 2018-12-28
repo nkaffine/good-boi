@@ -10,30 +10,98 @@ import Foundation
 import UIKit
 import AVFoundation
 
+/**
+ Errors that occur during the process of capturing an image
+ */
 enum CameraViewError: Error
 {
-    case captureDeviceFailure, deviceInputFailure,
-    sessionFailure, previewLayerFailure, photoCaptureFailure,
-    deviceNotAccesible, noDeviceAvailable
+    /**
+     Occurs when the capture device fails to initialize
+     */
+    case captureDeviceFailure
+    /**
+     Occurs when the device input fails to initialize
+     */
+    case deviceInputFailure
+    /**
+     Occurs when the capture session fails to initialize
+     */
+    case sessionFailure
+    /**
+     Occurs when the preview layer fails to initialize
+     */
+    case previewLayerFailure
+    /**
+     Occurs when the capture session fails to initialize
+     */
+    case photoCaptureFailure
+    /**
+     Occurs when the device permissions have been denied
+     */
+    case deviceNotAccesible
+    /**
+     Occurs when the device has no rear camera
+     */
+    case noDeviceAvailable
 }
 
+/**
+ The status of the current capture to prevent multiple requests being sent
+ */
 enum CaptureStatus
 {
-    case processing, idle
+    /**
+     There is an image capture in progress
+     */
+    case processing
+    /**
+     There is not an image capture in progress
+    */
+    case idle
 }
 
+/**
+ Delegate for the AVHandler
+ */
 protocol AVHandlerDelegate: class
 {
+    /**
+     Called when there was an error while setting up the preview or capturing the image
+     
+     - Parameter error: The error that ocurred either setting up the preview or capturing the image
+     */
     func failed(with error: CameraViewError)
+    /**
+     Called when the capture is successful
+     
+     - Parameter photo: The image that was captured
+     */
     func captureSucceeded(with photo: CGImage)
 }
 
+/**
+ Protocol for AVHandler
+ */
 protocol AVHandlerProtocol
 {
+    /**
+     Initiates a image capture that will be sent to the delegate
+     */
     func initiatePhotoCapture()
+    /**
+     Adds a layer with a preview of the rear facing camera to the given view
+     
+     - Parameter view: The view that will have the preview of the rear facing camera on it
+     */
     func setupPreviewLayer(on view: UIView)
     
+    /**
+     Delegate for the AVHandler
+     */
     var delegate: AVHandlerDelegate? { get set }
+    /**
+     The current status of the image capture
+    */
     var status: CaptureStatus { get }
 }
 

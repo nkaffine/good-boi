@@ -10,27 +10,78 @@ import Foundation
 import UIKit
 import Vision
 
+/**
+ Enum to represent the results of the dog classifier
+ */
 enum DogClassification: String
 {
+    /**
+     The case where the classifier determines the image was a dog
+    */
     case dog = "dog"
+    /**
+     The case where the classifier determines the image was not a dog
+     */
     case notDog = "not_dog"
 }
 
+/**
+ Errors that can occur during the classification process
+ */
 enum DogClassificationError
 {
-    case modelError, observationError, classificationParsingError, classificationError
+    /**
+     Occurs when the CoreML model request does not return the expected result
+     */
+    case modelError
+    /**
+     Occurs when there are no observations from the CoreML model request
+    */
+    case observationError
+    /**
+     Occurs when the results enum initializer fails.
+     */
+    case classificationParsingError
+    /**
+     Occurs when there is an error in the CoreML model request
+     */
+    case classificationError
 }
 
+/**
+ The protocol for the image classifier
+ */
 protocol DogClassifierProtocol: class
 {
+    /**
+     The delegate for the image classifier
+     */
     var delegate: DogClassifierDelegate? { get set }
+    /**
+     Starts the classification process with the given image that will eventually call the delegate with the result
+     
+     - Parameter photo: The photo for the classifier to classify.
+     */
     func classify(_ photo: CGImage)
 }
 
+/**
+ The protocol for the classifier delegate
+ */
 protocol DogClassifierDelegate: class
 {
+    /**
+     Called when the classifier successfully classifies an image
+     
+     - Parameter type: The classification result of the image classifier
+     */
     func didClassify(with type: DogClassification)
     
+    /**
+     Called when the classifier fails to classify the image
+     
+     - Parameter error: the error that occurred during the image classification
+    */
     func failedToClassify(with error: DogClassificationError)
 }
 

@@ -11,22 +11,52 @@ import UIKit
 
 protocol ClassificationManagerProtocol
 {
+    /**
+     The delegate for the classification managers
+    */
     var delegate: ClassificationManagerDelegate? { get set }
     
+    /**
+     Starts or resumes the session of image capturing and image classification
+     */
     func startSession()
+    /**
+     Pauses the session to stop image capturing and image classification
+     */
     func pauseSession()
+    /**
+     Pauses the session and indicates that the session is not going to be started again
+    */
     func endSession()
 }
 
 protocol ClassificationManagerDelegate
 {
+    /**
+     Called whenever there is an error in the underlying CoreMLModel or the image capturing
+     - Parameter error: The error that ocurred in the process of image classification
+     */
     func failed(with error: ClassificationError)
+    /**
+     Called whenever the CoreMLModel succesfully classifies an image
+     - Parameter type: The result of the classification
+     */
     func didClassify(with type: DogClassification)
 }
 
+/**
+ Errors that can occur during the process of image capturing and image classification
+ */
 enum ClassificationError
 {
-    case camera(error: CameraViewError), classification(error: DogClassificationError)
+    /**
+     An error that involves image capturing
+     */
+    case camera(error: CameraViewError)
+    /**
+     An error that involves image classification
+    */
+    case classification(error: DogClassificationError)
 }
 
 private enum ManagerStatus
@@ -34,6 +64,11 @@ private enum ManagerStatus
     case notStarted, inProgress, paused, ended
 }
 
+/**
+ Implentation of the ClassificationManagerProtocol
+ 
+ In the current implementation of this there is no difference between end session and pause session.
+ */
 class ClassificationManager: ClassificationManagerProtocol
 {
     private var avHandler: AVHandlerProtocol
