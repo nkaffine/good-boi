@@ -15,27 +15,6 @@ enum CameraViewError: Error
     case captureDeviceFailure, deviceInputFailure,
     sessionFailure, previewLayerFailure, photoCaptureFailure,
     deviceNotAccesible, noDeviceAvailable
-    
-    var message: String
-    {
-        switch self
-        {
-            case .captureDeviceFailure:
-                return "The capture device failed to initialized"
-            case .deviceInputFailure:
-                return "The device input failed to initialize"
-            case .sessionFailure:
-                return "The capture session failed"
-            case .previewLayerFailure:
-                return "The preview layer failed to initialize"
-            case .photoCaptureFailure:
-                return "The photo capture failed"
-            case .deviceNotAccesible:
-                return "Device input is unaccessable"
-            case .noDeviceAvailable:
-                return "There is no compatible camera on this device"
-        }
-    }
 }
 
 enum CaptureStatus
@@ -80,6 +59,7 @@ class AVHandler: NSObject, AVHandlerProtocol
             }
             return
         }
+      
         guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else
         {
             delegate?.failed(with: .deviceNotAccesible)

@@ -42,13 +42,14 @@ class ClassificationManager: ClassificationManagerProtocol
 
     var delegate: ClassificationManagerDelegate?
     
-    init(with view: UIView)
+    init(view: UIView, delegate: ClassificationManagerDelegate?)
     {
+        self.delegate = delegate
         avHandler = AVHandler()
-        avHandler.setupPreviewLayer(on: view)
         classifier = DogClassifierModel()
         classifier.delegate = self
         avHandler.delegate = self
+        avHandler.setupPreviewLayer(on: view)
     }
     
     private func capture()
@@ -91,6 +92,7 @@ extension ClassificationManager: AVHandlerDelegate
     }
     
     func failed(with error: CameraViewError) {
+        sessionStatus = .ended
         delegate?.failed(with: .camera(error: error))
     }
 }

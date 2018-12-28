@@ -38,9 +38,6 @@
                             <constraint firstItem="lut-ZE-Vtz" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="974-sQ-BXF"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="LR1-q8-EKs" appends="YES" id="rTH-3z-JUx"/>
-                        </connections>
                     </view>
                     <connections>
                         <outlet property="cameraView" destination="c50-vp-doC" id="bJL-4f-mag"/>
@@ -48,11 +45,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="LR1-q8-EKs">
-                    <connections>
-                        <action selector="mainViewTapped:" destination="BYZ-38-t0r" id="lIV-px-iXc"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="85.599999999999994" y="63.418290854572717"/>
         </scene>

@@ -18,6 +18,9 @@
 		01A49FD621D555020092B4ED /* DogClassifierModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A49FD521D555020092B4ED /* DogClassifierModel.swift */; };
 		01CC041521D57E8200145658 /* TailWagger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CC041421D57E8200145658 /* TailWagger.swift */; };
 		01CC041721D58B3100145658 /* ClassificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CC041621D58B3100145658 /* ClassificationManager.swift */; };
+		01CC041C21D59BB600145658 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CC041A21D59BB600145658 /* ErrorViewController.swift */; };
+		01CC041D21D59BB600145658 /* ErrorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01CC041B21D59BB600145658 /* ErrorViewController.xib */; };
+		01CC042221D5AA4700145658 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CC042121D5AA4700145658 /* ColorExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +49,9 @@
 		01A49FD521D555020092B4ED /* DogClassifierModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogClassifierModel.swift; sourceTree = "<group>"; };
 		01CC041421D57E8200145658 /* TailWagger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TailWagger.swift; sourceTree = "<group>"; };
 		01CC041621D58B3100145658 /* ClassificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassificationManager.swift; sourceTree = "<group>"; };
+		01CC041A21D59BB600145658 /* ErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
+		01CC041B21D59BB600145658 /* ErrorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ErrorViewController.xib; sourceTree = "<group>"; };
+		01CC042121D5AA4700145658 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,13 +94,10 @@
 			isa = PBXGroup;
 			children = (
 				01814F8021D00E2F00E1BA92 /* AppDelegate.swift */,
-				01814F8221D00E2F00E1BA92 /* GoodBoiViewController.swift */,
-				01CC041621D58B3100145658 /* ClassificationManager.swift */,
-				01CC041421D57E8200145658 /* TailWagger.swift */,
-				01814FA021D00FE100E1BA92 /* AVHandler.swift */,
-				01A49FD521D555020092B4ED /* DogClassifierModel.swift */,
+				01CC042021D5AA3A00145658 /* Utilities */,
+				01CC041E21D5A9DA00145658 /* View */,
+				01CC041F21D5A9EA00145658 /* Model */,
 				01814F8421D00E2F00E1BA92 /* Main.storyboard */,
-				01A49FD321D552DB0092B4ED /* DogClassifier.mlmodel */,
 				01814F8721D00E3000E1BA92 /* Assets.xcassets */,
 				01814F8921D00E3000E1BA92 /* LaunchScreen.storyboard */,
 				01814F8C21D00E3000E1BA92 /* Info.plist */,
@@ -109,6 +112,36 @@
 				01814F9721D00E3000E1BA92 /* Info.plist */,
 			);
 			path = "good-boiTests";
+			sourceTree = "<group>";
+		};
+		01CC041E21D5A9DA00145658 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				01814F8221D00E2F00E1BA92 /* GoodBoiViewController.swift */,
+				01CC041A21D59BB600145658 /* ErrorViewController.swift */,
+				01CC041B21D59BB600145658 /* ErrorViewController.xib */,
+				01CC041421D57E8200145658 /* TailWagger.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		01CC041F21D5A9EA00145658 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				01CC041621D58B3100145658 /* ClassificationManager.swift */,
+				01814FA021D00FE100E1BA92 /* AVHandler.swift */,
+				01A49FD521D555020092B4ED /* DogClassifierModel.swift */,
+				01A49FD321D552DB0092B4ED /* DogClassifier.mlmodel */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		01CC042021D5AA3A00145658 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				01CC042121D5AA4700145658 /* ColorExtension.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,6 +226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01814F8B21D00E3000E1BA92 /* LaunchScreen.storyboard in Resources */,
+				01CC041D21D59BB600145658 /* ErrorViewController.xib in Resources */,
 				01814F8821D00E3000E1BA92 /* Assets.xcassets in Resources */,
 				01814F8621D00E2F00E1BA92 /* Main.storyboard in Resources */,
 			);
@@ -215,8 +249,10 @@
 				01A49FD421D552DB0092B4ED /* DogClassifier.mlmodel in Sources */,
 				01A49FD621D555020092B4ED /* DogClassifierModel.swift in Sources */,
 				01CC041521D57E8200145658 /* TailWagger.swift in Sources */,
+				01CC042221D5AA4700145658 /* ColorExtension.swift in Sources */,
 				01CC041721D58B3100145658 /* ClassificationManager.swift in Sources */,
 				01814F8321D00E2F00E1BA92 /* GoodBoiViewController.swift in Sources */,
+				01CC041C21D59BB600145658 /* ErrorViewController.swift in Sources */,
 				01814F8121D00E2F00E1BA92 /* AppDelegate.swift in Sources */,
 				01814FA121D00FE100E1BA92 /* AVHandler.swift in Sources */,
 			);
