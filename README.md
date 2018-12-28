@@ -8,3 +8,8 @@ I decided to go with a seperate class to handle all of the image capture logic b
 
 # DogClassifierModel
 I decided to wrap the interaction with the Vision framework to make it easier to work with and because I plan on eventually abstracting away the specifics of this model so that this wrapper can be applied to other classification models easier. I will probably have the generic wrapper be passed a CoreMLModel to use and have the generic type be an enum that will convert the identifier returned by the classifier model to the enum and return that. That should give it the flexibility to work with any type of classification model.
+
+# ClassificationManager
+I originally had the logic that connected the AVHandler and the DogClassifierModel in the view controller but I didn't like having all of that floating around in the view controller when it didn't really need to be there. All the view controller needs to know in my opion is if there was an error with the capture, an error with the model, and what the result of the processing of the capture was. 
+
+I decided to have the manager use delegation to send messages to the view with the minimum information I think it needs. The manager sends a message to the delegate when there is a failure and with the result of a successful classification.
