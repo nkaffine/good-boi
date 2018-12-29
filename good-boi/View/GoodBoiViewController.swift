@@ -15,12 +15,18 @@ class GoodBoiViewController: UIViewController {
     
     @IBOutlet var cameraView: UIView!
     @IBOutlet var tailWagger: TailWagger!
+    @IBOutlet var privacyPolicyButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         cameraView.frame = view.bounds
         manager = ClassificationManager(view: cameraView, delegate: self)
         manager?.delegate = self
+        privacyPolicyButton.backgroundColor = .yellowBackground
+        privacyPolicyButton.setTitleColor(.secondaryPawBlue, for: .normal)
+        privacyPolicyButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        privacyPolicyButton.layer.cornerRadius = privacyPolicyButton.frame.height / 4
+        view.layoutIfNeeded()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -34,6 +40,21 @@ class GoodBoiViewController: UIViewController {
         }
         manager?.startSession()
         tailWagger.startWagging()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        manager?.endSession()
+        tailWagger.stopWagging()
+    }
+    
+    @IBAction func privacyPolicyButtonTapped(_ sender: UIButton)
+    {
+        guard let privacyPolicyURL = URL(string: "https://good-boi.kaffine.tech/privacy-policy") else
+        {
+            return
+        }
+        UIApplication.shared.open(privacyPolicyURL)
     }
 }
 

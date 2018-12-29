@@ -30,17 +30,28 @@
                                     <constraint firstAttribute="height" constant="250" id="Pu6-Pa-JGQ"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7sz-OS-2Sa">
+                                <rect key="frame" x="184" y="532" width="120" height="36"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                                <state key="normal" title="Privacy Policy"/>
+                                <connections>
+                                    <action selector="privacyPolicyButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="LBX-Z5-VQ8"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="lut-ZE-Vtz" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="3CF-vb-To7"/>
                             <constraint firstItem="lut-ZE-Vtz" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="974-sQ-BXF"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7sz-OS-2Sa" secondAttribute="trailing" constant="16" id="P7m-b4-aAM"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="7sz-OS-2Sa" secondAttribute="bottom" id="ehf-vz-UTc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="cameraView" destination="c50-vp-doC" id="bJL-4f-mag"/>
+                        <outlet property="privacyPolicyButton" destination="7sz-OS-2Sa" id="wjz-Rf-SqY"/>
                         <outlet property="tailWagger" destination="lut-ZE-Vtz" id="d71-P4-Bz9"/>
                     </connections>
                 </viewController>
