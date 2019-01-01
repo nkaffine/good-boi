@@ -38,6 +38,12 @@
                                     <action selector="privacyPolicyButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="LBX-Z5-VQ8"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="good_boi_detected" translatesAutoresizingMaskIntoConstraints="NO" id="XMB-jx-Gnl">
+                                <rect key="frame" x="16" y="372" width="288" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="CJR-zm-MBx"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
@@ -46,11 +52,15 @@
                             <constraint firstItem="lut-ZE-Vtz" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="974-sQ-BXF"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7sz-OS-2Sa" secondAttribute="trailing" constant="16" id="P7m-b4-aAM"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="7sz-OS-2Sa" secondAttribute="bottom" id="ehf-vz-UTc"/>
+                            <constraint firstItem="7sz-OS-2Sa" firstAttribute="top" secondItem="XMB-jx-Gnl" secondAttribute="bottom" constant="10" id="hJy-Tr-hkl"/>
+                            <constraint firstItem="XMB-jx-Gnl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="wNy-Oc-jZO"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="XMB-jx-Gnl" secondAttribute="trailing" constant="16" id="zTd-EY-ich"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="cameraView" destination="c50-vp-doC" id="bJL-4f-mag"/>
+                        <outlet property="goodBoiDetectedImageView" destination="XMB-jx-Gnl" id="H7u-CB-Cp7"/>
                         <outlet property="privacyPolicyButton" destination="7sz-OS-2Sa" id="wjz-Rf-SqY"/>
                         <outlet property="tailWagger" destination="lut-ZE-Vtz" id="d71-P4-Bz9"/>
                     </connections>
@@ -60,4 +70,7 @@
             <point key="canvasLocation" x="85.599999999999994" y="63.418290854572717"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="good_boi_detected" width="1080" height="431.51998901367188"/>
+    </resources>
 </document>

@@ -16,6 +16,7 @@
 		01814FA121D00FE100E1BA92 /* AVHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01814FA021D00FE100E1BA92 /* AVHandler.swift */; };
 		01A49FD421D552DB0092B4ED /* DogClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 01A49FD321D552DB0092B4ED /* DogClassifier.mlmodel */; };
 		01A49FD621D555020092B4ED /* DogClassifierModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A49FD521D555020092B4ED /* DogClassifierModel.swift */; };
+		01C205BF21DBC7DD007CFABD /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C205BE21DBC7DD007CFABD /* ImageExtension.swift */; };
 		01CC041521D57E8200145658 /* TailWagger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CC041421D57E8200145658 /* TailWagger.swift */; };
 		01CC041721D58B3100145658 /* ClassificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CC041621D58B3100145658 /* ClassificationManager.swift */; };
 		01CC041C21D59BB600145658 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CC041A21D59BB600145658 /* ErrorViewController.swift */; };
@@ -47,6 +48,7 @@
 		01814FA021D00FE100E1BA92 /* AVHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVHandler.swift; sourceTree = "<group>"; };
 		01A49FD321D552DB0092B4ED /* DogClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = DogClassifier.mlmodel; sourceTree = "<group>"; };
 		01A49FD521D555020092B4ED /* DogClassifierModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DogClassifierModel.swift; sourceTree = "<group>"; };
+		01C205BE21DBC7DD007CFABD /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
 		01CC041421D57E8200145658 /* TailWagger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TailWagger.swift; sourceTree = "<group>"; };
 		01CC041621D58B3100145658 /* ClassificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassificationManager.swift; sourceTree = "<group>"; };
 		01CC041A21D59BB600145658 /* ErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				01CC042121D5AA4700145658 /* ColorExtension.swift */,
+				01C205BE21DBC7DD007CFABD /* ImageExtension.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -249,6 +252,7 @@
 				01A49FD421D552DB0092B4ED /* DogClassifier.mlmodel in Sources */,
 				01A49FD621D555020092B4ED /* DogClassifierModel.swift in Sources */,
 				01CC041521D57E8200145658 /* TailWagger.swift in Sources */,
+				01C205BF21DBC7DD007CFABD /* ImageExtension.swift in Sources */,
 				01CC042221D5AA4700145658 /* ColorExtension.swift in Sources */,
 				01CC041721D58B3100145658 /* ClassificationManager.swift in Sources */,
 				01814F8321D00E2F00E1BA92 /* GoodBoiViewController.swift in Sources */,

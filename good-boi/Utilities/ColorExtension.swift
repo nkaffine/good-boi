@@ -25,4 +25,9 @@ extension UIColor
     {
         return UIColor(red: 253 / 255, green: 179 / 255, blue: 80 / 255, alpha: 1.0)
     }
+    
+    static var privacyPolicyRed: UIColor
+    {
+        return UIColor(red: 229/255, green: 69/255, blue: 78/255, alpha: 1.0)
+    }
 }

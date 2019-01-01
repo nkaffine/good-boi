@@ -103,6 +103,11 @@ protocol AVHandlerProtocol
      The current status of the image capture
     */
     var status: CaptureStatus { get }
+    
+    /**
+     Whether or not the app has been given permission to use the camera.
+     */
+    static var isAuthorized: Bool { get }
 }
 
 class AVHandler: NSObject, AVHandlerProtocol
@@ -114,6 +119,10 @@ class AVHandler: NSObject, AVHandlerProtocol
     
     weak var delegate: AVHandlerDelegate?
     private (set) var status: CaptureStatus = .idle
+    static var isAuthorized: Bool
+    {
+        return AVCaptureDevice.authorizationStatus(for: .video) == .authorized
+    }
     
     func setupPreviewLayer(on view: UIView) {
         if AVCaptureDevice.authorizationStatus(for: .video) == .notDetermined
@@ -124,31 +133,35 @@ class AVHandler: NSObject, AVHandlerProtocol
                 {
                     self?.setupPreviewLayer(on: view)
                 }
+                else
+                {
+                    self?.failed(with: .deviceNotAccesible)
+                }
             }
             return
         }
       
         guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else
         {
-            delegate?.failed(with: .deviceNotAccesible)
+            failed(with: .deviceNotAccesible)
             return
         }
         
         guard !AVCaptureDevice.DiscoverySession(deviceTypes: [AVCaptureDevice.DeviceType.builtInTelephotoCamera, .builtInDualCamera, .builtInTrueDepthCamera, .builtInWideAngleCamera], mediaType: .video, position: .back).devices.isEmpty else
         {
-            delegate?.failed(with: .deviceNotAccesible)
+            failed(with: .noDeviceAvailable)
             return
         }
         
         guard let captureDevice = AVCaptureDevice.default(for: .video) else
         {
-            delegate?.failed(with: .captureDeviceFailure)
+            failed(with: .captureDeviceFailure)
             return
         }
         
         guard let input = try? AVCaptureDeviceInput(device: captureDevice) else
         {
-            delegate?.failed(with: .deviceInputFailure)
+            failed(with: .deviceInputFailure)
             return
         }
         
@@ -168,13 +181,18 @@ class AVHandler: NSObject, AVHandlerProtocol
             }
             else
             {
-                delegate?.failed(with: .previewLayerFailure)
+                failed(with: .previewLayerFailure)
             }
         }
         else
         {
-            delegate?.failed(with: .sessionFailure)
+            failed(with: .sessionFailure)
         }
+    }
+    
+    private func failed(with error: CameraViewError)
+    {
+        delegate?.failed(with: error)
     }
 }
 

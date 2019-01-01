@@ -16,17 +16,19 @@ class GoodBoiViewController: UIViewController {
     @IBOutlet var cameraView: UIView!
     @IBOutlet var tailWagger: TailWagger!
     @IBOutlet var privacyPolicyButton: UIButton!
+    @IBOutlet var goodBoiDetectedImageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         cameraView.frame = view.bounds
         manager = ClassificationManager(view: cameraView, delegate: self)
         manager?.delegate = self
-        privacyPolicyButton.backgroundColor = .yellowBackground
-        privacyPolicyButton.setTitleColor(.secondaryPawBlue, for: .normal)
-        privacyPolicyButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        privacyPolicyButton.backgroundColor = .privacyPolicyRed
+        privacyPolicyButton.setTitleColor(.white, for: .normal)
+        privacyPolicyButton.contentEdgeInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
         privacyPolicyButton.layer.cornerRadius = privacyPolicyButton.frame.height / 4
         view.layoutIfNeeded()
+        self.goodBoiDetectedImageView.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -65,20 +67,31 @@ extension GoodBoiViewController: ClassificationManagerDelegate
         {
             case .dog:
                 tailWagger.stopWagging()
+                goodBoiDetectedImageView.isHidden = false
             case .notDog:
                 tailWagger.startWagging()
+                goodBoiDetectedImageView.isHidden = true
         }
     }
     
     func failed(with error: ClassificationError) {
         if errorQueue == nil
         {
-            //Need to be careful here because the outlets are not set yet
-            let errorViewController = ErrorViewController()
-            errorViewController.errorTitle = error.title
-            errorViewController.detail = error.message
-            errorViewController.action = error.action
-            present(errorViewController, animated: true, completion: nil)
+            switch error
+            {
+                case .classification:
+                    //For know just silently fail when the model fails and make it say it
+                    //can't detect a dog. This shouldn't happen often and shouldn't
+                    //really take the user out of the experience if it does.
+                    didClassify(with: .notDog)
+                case .camera(let error):
+                    //Need to be careful here because the outlets are not set yet
+                    let errorViewController = ErrorViewController()
+                    errorViewController.errorTitle = error.title
+                    errorViewController.detail = error.message
+                    errorViewController.action = error.action
+                    present(errorViewController, animated: true, completion: nil)
+            }
         }
         else
         {
@@ -87,25 +100,19 @@ extension GoodBoiViewController: ClassificationManagerDelegate
     }
 }
 
-private extension ClassificationError
+private extension CameraViewError
 {
     var message: String
     {
         switch self
         {
-        case .camera(let error):
-            switch error
-            {
-                case .captureDeviceFailure, .deviceInputFailure, .sessionFailure,
-                     .previewLayerFailure, .photoCaptureFailure:
-                    return "Please try again!"
-                case .deviceNotAccesible:
-                    return "Go to settings and enable camera access so we can help you find good bois 🐶"
-                case .noDeviceAvailable:
-                    return "The camera is an important part of the experience of this app. Please use a device with a camera."
-            }
-        case .classification:
-            return "Something went wrong while determine if there was a good boi on the screen. Please try again."
+            case .captureDeviceFailure, .deviceInputFailure, .sessionFailure,
+                 .previewLayerFailure, .photoCaptureFailure:
+                return "Please try again!"
+            case .deviceNotAccesible:
+                return "Go to settings and enable camera access so we can help you find good bois 🐶"
+            case .noDeviceAvailable:
+                return "The camera is an important part of the experience of this app. Please use a device with a camera."
         }
     }
     
@@ -113,19 +120,13 @@ private extension ClassificationError
     {
         switch self
         {
-            case .camera(let error):
-                switch error
-                {
-                case .captureDeviceFailure, .deviceInputFailure, .sessionFailure, .previewLayerFailure,
-                     .photoCaptureFailure:
-                    return "Something went wrong with the camera"
-                case .deviceNotAccesible:
-                    return "We don't have access to your camera"
-                case .noDeviceAvailable:
-                    return "It looks like this device doesn't have a camera"
-                }
-            case .classification:
-                return "We may have experienced a cuteness overload there 🐶"
+            case .captureDeviceFailure, .deviceInputFailure, .sessionFailure, .previewLayerFailure,
+                 .photoCaptureFailure:
+                return "Something went wrong with the camera"
+            case .deviceNotAccesible:
+                return "We don't have access to your camera"
+            case .noDeviceAvailable:
+                return "It looks like this device doesn't have a camera"
         }
     }
     
@@ -133,17 +134,13 @@ private extension ClassificationError
     {
         switch self
         {
-            case .camera(let error):
-                switch error
-                {
-                    case .captureDeviceFailure, .deviceInputFailure, .sessionFailure,
-                         .previewLayerFailure, .photoCaptureFailure, .noDeviceAvailable:
-                        return .dismiss
-                    case .deviceNotAccesible:
-                        return .settings
-                }
-            case .classification:
+            case .captureDeviceFailure, .deviceInputFailure, .sessionFailure,
+                 .previewLayerFailure, .photoCaptureFailure:
                 return .dismiss
+            case .deviceNotAccesible:
+                return .settings
+            case .noDeviceAvailable:
+                return .none
         }
     }
 }
