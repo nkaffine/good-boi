@@ -10,7 +10,7 @@ import UIKit
 import Vision
 
 class GoodBoiViewController: UIViewController {
-    private var errorQueue: [ClassificationError]? = []
+    private var errorQueue: [ClassificationError]?
     private var manager: ClassificationManager?
     
     @IBOutlet var cameraView: UIView!
@@ -20,6 +20,7 @@ class GoodBoiViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        errorQueue = []
         cameraView.frame = view.bounds
         manager = ClassificationManager(view: cameraView, delegate: self)
         manager?.delegate = self
@@ -40,6 +41,7 @@ class GoodBoiViewController: UIViewController {
             errorQueue = nil
             failed(with: error)
         }
+        errorQueue = nil
         manager?.startSession()
         tailWagger.startWagging()
     }
@@ -84,13 +86,21 @@ extension GoodBoiViewController: ClassificationManagerDelegate
                     //can't detect a dog. This shouldn't happen often and shouldn't
                     //really take the user out of the experience if it does.
                     didClassify(with: .notDog)
-                case .camera(let error):
-                    //Need to be careful here because the outlets are not set yet
-                    let errorViewController = ErrorViewController()
-                    errorViewController.errorTitle = error.title
-                    errorViewController.detail = error.message
-                    errorViewController.action = error.action
-                    present(errorViewController, animated: true, completion: nil)
+                case .camera(let cameraError):
+                    switch cameraError
+                    {
+                        case .photoCaptureFailure:
+                            manager?.startSession()
+                        
+                        case .captureDeviceFailure, .deviceInputFailure, .sessionFailure,
+                             .previewLayerFailure, .deviceNotAccesible, .noDeviceAvailable:
+                            //Need to be careful here because the outlets are not set yet
+                            let errorViewController = ErrorViewController()
+                            errorViewController.errorTitle = cameraError.title
+                            errorViewController.detail = cameraError.message
+                            errorViewController.action = cameraError.action
+                            present(errorViewController, animated: true, completion: nil)
+                    }
             }
         }
         else
