@@ -57,12 +57,14 @@ protocol DogClassifierProtocol: class
      The delegate for the image classifier
      */
     var delegate: DogClassifierDelegate? { get set }
+   
     /**
-     Starts the classification process with the given image that will eventually call the delegate with the result
+     Starts the classification process with the given image buffer that will call the delegate with the result
+     of the classification.
      
-     - Parameter photo: The photo for the classifier to classify.
-     */
-    func classify(_ photo: CGImage)
+     - Parameter imageBuffer: the image buffer for the classifier to classify.
+    */
+    func classify(_ imageBuffer: CVImageBuffer)
 }
 
 /**
@@ -95,7 +97,7 @@ class DogClassifierModel: DogClassifierProtocol
         model = try? VNCoreMLModel(for: DogClassifier().model)
     }
     
-    func classify(_ photo: CGImage) {
+    func classify(_ imageBuffer: CVImageBuffer) {
         guard let model = model else
         {
             return
@@ -121,7 +123,7 @@ class DogClassifierModel: DogClassifierProtocol
         }
         
         request.imageCropAndScaleOption = .centerCrop
-        let requestHandler = VNImageRequestHandler(cgImage: photo, options: [:])
+        let requestHandler = VNImageRequestHandler(cvPixelBuffer: imageBuffer, options: [:])
         do
         {
             try requestHandler.perform([request])

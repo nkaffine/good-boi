@@ -93,9 +93,9 @@ class ClassificationManager: ClassificationManagerProtocol
         {
             return
         }
-        if avHandler.status == .idle
+        if avHandler.status == .stopped
         {
-            avHandler.initiatePhotoCapture()
+            avHandler.startSession()
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5)
         {
@@ -112,18 +112,20 @@ class ClassificationManager: ClassificationManagerProtocol
     func pauseSession()
     {
         sessionStatus = .paused
+        avHandler.stopSession()
     }
     
     func endSession()
     {
         sessionStatus = .ended
+        avHandler.stopSession()
     }
 }
 
 extension ClassificationManager: AVHandlerDelegate
 {
-    func captureSucceeded(with photo: CGImage) {
-        classifier.classify(photo)
+    func captureSucceeded(with imageBuffer: CVImageBuffer) {
+        classifier.classify(imageBuffer)
     }
     
     func failed(with error: CameraViewError) {
