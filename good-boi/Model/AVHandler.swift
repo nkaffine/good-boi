@@ -51,13 +51,13 @@ enum CameraViewError: Error
 enum CaptureStatus
 {
     /**
-     There is an image capture in progress
+     The image capture session is not running
      */
-    case processing
+    case stopped
     /**
-     There is not an image capture in progress
-    */
-    case idle
+     The image capture session is running
+     */
+    case running
 }
 
 /**
@@ -76,7 +76,7 @@ protocol AVHandlerDelegate: class
      
      - Parameter photo: The image that was captured
      */
-    func captureSucceeded(with photo: CGImage)
+    func captureSucceeded(with imageBuffer: CVImageBuffer)
 }
 
 /**
@@ -85,9 +85,13 @@ protocol AVHandlerDelegate: class
 protocol AVHandlerProtocol
 {
     /**
-     Initiates a image capture that will be sent to the delegate
+     Starts the capture session
      */
-    func initiatePhotoCapture()
+    func startSession()
+    /**
+     Stops the capture session
+     */
+    func stopSession()
     /**
      Adds a layer with a preview of the rear facing camera to the given view
      
@@ -110,15 +114,43 @@ protocol AVHandlerProtocol
     static var isAuthorized: Bool { get }
 }
 
+private struct RecognitionLimiter
+{
+    private var state: Int
+    
+    init()
+    {
+        state = 0
+    }
+    
+    mutating func shouldRecognize() -> Bool
+    {
+        let shouldRecognize = state == 0
+        self.state = (state + 1) % 10
+        return shouldRecognize
+    }
+}
+
 class AVHandler: NSObject, AVHandlerProtocol
 {
     private var captureSession: AVCaptureSession?
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
-    private var output: AVCapturePhotoOutput = AVCapturePhotoOutput()
-    private var captureSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
+    private var output: AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
+    private var outputQueue = DispatchQueue(label: "video_output", qos: .userInitiated, attributes: [], autoreleaseFrequency: .workItem)
+    private var limiter = RecognitionLimiter()
     
     weak var delegate: AVHandlerDelegate?
-    private (set) var status: CaptureStatus = .idle
+    var status: CaptureStatus
+    {
+        if captureSession?.isRunning ?? false
+        {
+            return .running
+        }
+        else
+        {
+            return .stopped
+        }
+    }
     static var isAuthorized: Bool
     {
         return AVCaptureDevice.authorizationStatus(for: .video) == .authorized
@@ -178,6 +210,7 @@ class AVHandler: NSObject, AVHandlerProtocol
                 view.layer.addSublayer(layer)
                 captureSession.startRunning()
                 captureSession.addOutput(output)
+                output.setSampleBufferDelegate(self, queue: outputQueue)
             }
             else
             {
@@ -194,36 +227,31 @@ class AVHandler: NSObject, AVHandlerProtocol
     {
         delegate?.failed(with: error)
     }
-}
-
-extension AVHandler
-{
-    func initiatePhotoCapture() {
-        guard let _ = captureSession else
-        {
-            delegate?.failed(with: .photoCaptureFailure)
-            return
-        }
-        
-        status = .processing
-        let photoSettings = AVCapturePhotoSettings(from: captureSettings)
-        output.capturePhoto(with: photoSettings, delegate: self)
+    
+    func startSession() {
+        captureSession?.startRunning()
+    }
+    
+    func stopSession() {
+        captureSession?.stopRunning()
     }
 }
 
-extension AVHandler: AVCapturePhotoCaptureDelegate
+extension AVHandler: AVCaptureVideoDataOutputSampleBufferDelegate
 {
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?)
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection)
     {
-        if let cgImage = photo.cgImageRepresentation()
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer), limiter.shouldRecognize() else
         {
-            delegate?.captureSucceeded(with: cgImage.takeUnretainedValue())
-            status = .idle
+            DispatchQueue.main.sync
+            {
+                delegate?.failed(with: .photoCaptureFailure)
+            }
+            return
         }
-        else
+        DispatchQueue.main.sync
         {
-            delegate?.failed(with: .photoCaptureFailure)
-            status = .idle
+            delegate?.captureSucceeded(with: imageBuffer)
         }
     }
 }
