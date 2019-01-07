@@ -22,6 +22,7 @@
 		01CC041C21D59BB600145658 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CC041A21D59BB600145658 /* ErrorViewController.swift */; };
 		01CC041D21D59BB600145658 /* ErrorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01CC041B21D59BB600145658 /* ErrorViewController.xib */; };
 		01CC042221D5AA4700145658 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01CC042121D5AA4700145658 /* ColorExtension.swift */; };
+		01EC56DB21E2F1C100EAAD60 /* ClassificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EC56DA21E2F1C100EAAD60 /* ClassificationModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		01CC041A21D59BB600145658 /* ErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
 		01CC041B21D59BB600145658 /* ErrorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ErrorViewController.xib; sourceTree = "<group>"; };
 		01CC042121D5AA4700145658 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		01EC56DA21E2F1C100EAAD60 /* ClassificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassificationModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +135,7 @@
 				01CC041621D58B3100145658 /* ClassificationManager.swift */,
 				01814FA021D00FE100E1BA92 /* AVHandler.swift */,
 				01A49FD521D555020092B4ED /* DogClassifierModel.swift */,
+				01EC56DA21E2F1C100EAAD60 /* ClassificationModel.swift */,
 				01A49FD321D552DB0092B4ED /* DogClassifier.mlmodel */,
 			);
 			path = Model;
@@ -249,6 +252,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01EC56DB21E2F1C100EAAD60 /* ClassificationModel.swift in Sources */,
 				01A49FD421D552DB0092B4ED /* DogClassifier.mlmodel in Sources */,
 				01A49FD621D555020092B4ED /* DogClassifierModel.swift in Sources */,
 				01CC041521D57E8200145658 /* TailWagger.swift in Sources */,
