@@ -41,6 +41,7 @@ class GoodBoiViewController: UIViewController {
                                         model: DogClassifier().model,
                                         completion: { [weak self] classification in self?.didClassify(with: classification)})
         manager?.delegate = self
+        self.goodBoiDetectedImageView.isHidden = true
     }
     
     private func setUpCameraView()
@@ -51,7 +52,6 @@ class GoodBoiViewController: UIViewController {
         privacyPolicyButton.contentEdgeInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
         privacyPolicyButton.layer.cornerRadius = privacyPolicyButton.frame.height / 4
         view.layoutIfNeeded()
-        self.goodBoiDetectedImageView.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
