@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreML
 
 protocol ClassificationManagerProtocol
 {
@@ -37,11 +38,6 @@ protocol ClassificationManagerDelegate
      - Parameter error: The error that ocurred in the process of image classification
      */
     func failed(with error: ClassificationError)
-    /**
-     Called whenever the CoreMLModel succesfully classifies an image
-     - Parameter type: The result of the classification
-     */
-    func didClassify(with type: DogClassification)
 }
 
 /**
@@ -56,7 +52,7 @@ enum ClassificationError
     /**
      An error that involves image classification
     */
-    case classification(error: DogClassificationError)
+    case classification(error: ClassifierError)
 }
 
 private enum ManagerStatus
@@ -69,19 +65,22 @@ private enum ManagerStatus
  
  In the current implementation of this there is no difference between end session and pause session.
  */
-class ClassificationManager: ClassificationManagerProtocol
+class ClassificationManager<ClassifiedType: RawRepresentable>: ClassificationManagerProtocol where ClassifiedType.RawValue == String
 {
     private var avHandler: AVHandlerProtocol
-    private var classifier: DogClassifierModel
+    private var classifier: ClassifierModel<ClassifiedType>
     private var sessionStatus = ManagerStatus.notStarted
+    private var completionFunction: (ClassifiedType) -> ()
 
     var delegate: ClassificationManagerDelegate?
     
-    init(view: UIView, delegate: ClassificationManagerDelegate?)
+    init(view: UIView, delegate: ClassificationManagerDelegate?,
+         model: MLModel, completion: @escaping (ClassifiedType) -> ())
     {
         self.delegate = delegate
         avHandler = AVHandler()
-        classifier = DogClassifierModel()
+        self.completionFunction = completion
+        classifier = ClassifierModel(model: model)
         classifier.delegate = self
         avHandler.delegate = self
         avHandler.setupPreviewLayer(on: view)
@@ -125,7 +124,7 @@ class ClassificationManager: ClassificationManagerProtocol
 extension ClassificationManager: AVHandlerDelegate
 {
     func captureSucceeded(with imageBuffer: CVImageBuffer) {
-        classifier.classify(imageBuffer)
+        classifier.classify(imageBuffer, completion: completionFunction)
     }
     
     func failed(with error: CameraViewError) {
@@ -134,13 +133,9 @@ extension ClassificationManager: AVHandlerDelegate
     }
 }
 
-extension ClassificationManager: DogClassifierDelegate
+extension ClassificationManager: ClassifierDelegate
 {
-    func didClassify(with type: DogClassification) {
-        delegate?.didClassify(with: type)
-    }
-    
-    func failedToClassify(with error: DogClassificationError) {
+    func failedToClassify(with error: ClassifierError) {
         delegate?.failed(with: .classification(error: error))
     }
 }

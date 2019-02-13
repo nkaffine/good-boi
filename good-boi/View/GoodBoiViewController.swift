@@ -9,9 +9,24 @@
 import UIKit
 import Vision
 
+/**
+ Enum to represent the results of the dog classifier
+ */
+enum DogClassification: String
+{
+    /**
+     The case where the classifier determines the image was a dog
+     */
+    case dog = "dog"
+    /**
+     The case where the classifier determines the image was not a dog
+     */
+    case notDog = "not_dog"
+}
+
 class GoodBoiViewController: UIViewController {
     private var errorQueue: [ClassificationError]?
-    private var manager: ClassificationManager?
+    private var manager: ClassificationManager<DogClassification>?
     
     @IBOutlet var cameraView: UIView!
     @IBOutlet var tailWagger: TailWagger!
@@ -21,9 +36,16 @@ class GoodBoiViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         errorQueue = []
-        cameraView.frame = view.bounds
-        manager = ClassificationManager(view: cameraView, delegate: self)
+        setUpCameraView()
+        manager = ClassificationManager(view: cameraView, delegate: self,
+                                        model: DogClassifier().model,
+                                        completion: { [weak self] classification in self?.didClassify(with: classification)})
         manager?.delegate = self
+    }
+    
+    private func setUpCameraView()
+    {
+        cameraView.frame = view.bounds
         privacyPolicyButton.backgroundColor = .privacyPolicyRed
         privacyPolicyButton.setTitleColor(.white, for: .normal)
         privacyPolicyButton.contentEdgeInsets = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
@@ -64,18 +86,6 @@ class GoodBoiViewController: UIViewController {
 
 extension GoodBoiViewController: ClassificationManagerDelegate
 {
-    func didClassify(with type: DogClassification) {
-        switch type
-        {
-            case .dog:
-                tailWagger.stopWagging()
-                goodBoiDetectedImageView.isHidden = false
-            case .notDog:
-                tailWagger.startWagging()
-                goodBoiDetectedImageView.isHidden = true
-        }
-    }
-    
     func failed(with error: ClassificationError) {
         if errorQueue == nil
         {
@@ -151,6 +161,21 @@ private extension CameraViewError
                 return .settings
             case .noDeviceAvailable:
                 return .none
+        }
+    }
+}
+
+extension GoodBoiViewController
+{
+    func didClassify(with type: DogClassification) {
+        switch type
+        {
+            case .dog:
+                tailWagger.stopWagging()
+                goodBoiDetectedImageView.isHidden = false
+            case .notDog:
+                tailWagger.startWagging()
+                goodBoiDetectedImageView.isHidden = true
         }
     }
 }

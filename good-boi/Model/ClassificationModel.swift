@@ -32,23 +32,11 @@ enum ClassifierError
     case classificationError
 }
 
-/**
- The protocol for the classifier delegate
- */
-protocol ClassifierDelegate
+protocol ClassifierDelegate: class
 {
-    associatedtype ClassificationType: RawRepresentable where ClassificationType.RawValue == String
-
-    /**
-     Called when the classifier successfully classifies an image
-
-     - Parameter type: The classification result of the image classifier
-     */
-    func didClassify(with type: ClassificationType)
-
     /**
      Called when the classifier fails to classify the image
-
+     
      - Parameter error: the error that occurred during the image classification
      */
     func failedToClassify(with error: ClassifierError)
@@ -59,13 +47,7 @@ protocol ClassifierDelegate
  */
 protocol ClassifierProtocol: class
 {
-    associatedtype ClassificationType
-    associatedtype Delegate: ClassifierDelegate where Delegate.ClassificationType == ClassificationType
-
-    /**
-     The delegate for the image classifier
-     */
-    var delegate: Delegate? { get set }
+    associatedtype ClassificationType: RawRepresentable
 
     /**
      Starts the classification process with the given image buffer that will call the delegate with the result
@@ -73,10 +55,5 @@ protocol ClassifierProtocol: class
 
      - Parameter imageBuffer: the image buffer for the classifier to classify.
      */
-    func classify(_ imageBuffer: CVImageBuffer)
-}
-
-class Classifier<ClassificationType: RawRepresentable, Delegate: ClassifierDelegate> where ClassificationType.RawValue == String, ClassifierDelegate.ClassificationType == ClassificationType
-{
-    
+    func classify(_ imageBuffer: CVImageBuffer, completion: @escaping (ClassificationType) -> ())
 }
